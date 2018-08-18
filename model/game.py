@@ -18,6 +18,7 @@ class Game():
 
         self.islands = island.IslandMapFactory()
         self.islands.load(Game.GAME_DATA_DIR, "maps.csv")
+        self.islands.print()
 
         self.locations = island.IslandLocationFactory()
         self.locations.load(Game.GAME_DATA_DIR, "squares.csv")
