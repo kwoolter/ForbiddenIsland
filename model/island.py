@@ -8,10 +8,17 @@ class Island():
         self.map = None
 
 class IslandLocation():
+
+    NORMAL = "normal"
+    FLOODED = "flooded"
+    SUNK = "sunk"
+
+
     def __init__(self, name : str, start : str, temple : str, is_exit : str):
         self.name = name
         self.start = start
         self.temple = temple
+        self._state =  IslandLocation.NORMAL
 
         if start == "":
             self.start = None
@@ -37,6 +44,15 @@ class IslandLocation():
             str += ", exit from the game"
 
         return str
+
+    def water_rise(self):
+
+        if self._state == IslandLocation.NORMAL:
+            self._state = IslandLocation.FLOODED
+        elif self._state == IslandLocation.FLOODED:
+            self._state = IslandLocation.SUNK
+
+        return self._state
 
 
 class IslandLocationFactory():
