@@ -15,6 +15,10 @@ class GameCLI(cmd.Cmd):
 
     def do_start(self, args):
         """Start the game"""
+
+        self.model = model.Game()
+        self.model.initialise()
+
         try:
 
             self.model = model.Game()

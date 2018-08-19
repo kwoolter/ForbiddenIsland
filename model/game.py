@@ -1,6 +1,7 @@
 import model.island as island
 import logging
 import os
+import random
 
 class Game():
 
@@ -16,13 +17,24 @@ class Game():
     def initialise(self):
         logging.info("Initialising game...")
 
-        self.islands = island.IslandMapFactory()
-        self.islands.load(Game.GAME_DATA_DIR, "maps.csv")
-        self.islands.print()
-
         self.locations = island.IslandLocationFactory()
         self.locations.load(Game.GAME_DATA_DIR, "squares.csv")
 
         self.locations.print()
+
+        self.islands = island.IslandMapFactory()
+        self.islands.load(Game.GAME_DATA_DIR, "maps.csv")
+
+        current_island = self.islands.get_island("Basic")
+
+        location_names = self.locations.location_names
+        while current_island.free_locations > 0:
+            random_location_name = random.choice(location_names)
+            current_island.add_location(self.locations.get_location(random_location_name))
+            location_names.remove(random_location_name)
+
+        #self.islands.print()
+        current_island.print()
+
 
         logging.info("Finished Initialising game...")
