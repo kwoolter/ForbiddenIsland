@@ -150,6 +150,12 @@ class IslandMap():
         else:
             raise Exception("Can't add location {0} as not more free squares.".format(new_location.name))
 
+    def print_map(self):
+        print("{0} island ({1}x{2})".format(self.name, self.width, self.height))
+        print("Layout:")
+        for row in self.layout:
+            print(row)
+
     def print(self):
         print("{0} island ({1}x{2})".format(self.name, self.width, self.height))
         print("Layout:")

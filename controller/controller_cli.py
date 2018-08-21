@@ -20,10 +20,18 @@ class GameCLI(cmd.Cmd):
         self.model = model.Game()
         self.model.initialise()
 
-        island_names = self.model.get_island_names()
+        loop = True
 
-        chosen_island = utils.pick("Island", island_names)
-        self.model.create_island(chosen_island)
+        while loop is True:
+            island_names = self.model.get_island_names()
+
+            chosen_island = utils.pick("Island", island_names)
+            self.model.create_island(chosen_island)
+
+            self.model.current_island.print_map()
+
+            if utils.confirm("Ok with this island?") is True:
+                loop = False
 
         # try:
         #
