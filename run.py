@@ -4,7 +4,7 @@ import controller
 
 def main():
 
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.WARN)
 
 
     c = controller.GameCLI()

@@ -86,7 +86,7 @@ class IslandLocationFactory():
 
             # For each row in the file....
             for row in reader:
-                print(str(row))
+                #print(str(row))
                 name = row.get("Name")
                 start = row.get("Start")
                 temple = row.get("Temple")
@@ -169,6 +169,9 @@ class IslandMapFactory():
     def __init__(self):
         self.islands = {}
 
+    def get_island_names(self):
+        return list(self.islands.keys())
+
     def get_island(self, island_name : str):
         if island_name in self.islands.keys():
             return self.islands[island_name]
@@ -221,6 +224,8 @@ class IslandMapFactory():
                 new_map.add_row(layout)
 
                 old_name = name
+
+            new_map.build_map()
 
         logging.info("Loaded {0} islands".format(len(self.islands.keys())))
 

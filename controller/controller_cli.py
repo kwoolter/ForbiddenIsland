@@ -1,5 +1,6 @@
 import cmd
 import model
+import utils
 
 
 class GameCLI(cmd.Cmd):
@@ -19,12 +20,17 @@ class GameCLI(cmd.Cmd):
         self.model = model.Game()
         self.model.initialise()
 
-        try:
+        island_names = self.model.get_island_names()
 
-            self.model = model.Game()
-            self.model.initialise()
+        chosen_island = utils.pick("Island", island_names)
+        self.model.create_island(chosen_island)
 
-        except Exception as err:
-            print(str(err))
+        # try:
+        #
+        #     self.model = model.Game()
+        #     self.model.initialise()
+        #
+        # except Exception as err:
+        #     print(str(err))
 
 
