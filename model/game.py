@@ -52,6 +52,10 @@ class Game():
             self.current_island = self.islands.get_island(island_name)
 
             location_names = self.locations.location_names
+
+            if len(location_names) < self.current_island.free_locations:
+                raise Exception("Error trying to add {0} locations to a map with {1} sqaures.".format(len(location_names),self.current_island.free_locations))
+
             while self.current_island.free_locations > 0:
                 random_location_name = random.choice(location_names)
                 self.current_island.add_location(self.locations.get_location(random_location_name))
