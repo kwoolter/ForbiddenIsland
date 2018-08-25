@@ -3,16 +3,17 @@ import logging
 import os
 import random
 import copy
+import math
 
 class Game():
 
-    EXPLORER_DIVER = "Diver"
-    EXPLORER_PILOT = "Pilot"
-    EXPLORER_ENGINEER = "Engineer"
-    EXPLORER_MESSENGER = "Messenger"
-    EXPLORER_NAVIGATOR = "Navigator"
-    EXPLORER_EXPLORER = "Explorer"
-    EXPLORER_TYPES = (EXPLORER_DIVER, EXPLORER_ENGINEER, EXPLORER_PILOT, EXPLORER_MESSENGER, EXPLORER_NAVIGATOR, EXPLORER_EXPLORER)
+    ADVENTURER_DIVER = "Diver"
+    ADVENTURER_PILOT = "Pilot"
+    ADVENTURER_ENGINEER = "Engineer"
+    ADVENTURER_MESSENGER = "Messenger"
+    ADVENTURER_NAVIGATOR = "Navigator"
+    ADVENTURER_EXPLORER = "Explorer"
+    ADVENTURER_TYPES = (ADVENTURER_DIVER, ADVENTURER_ENGINEER, ADVENTURER_PILOT, ADVENTURER_MESSENGER, ADVENTURER_NAVIGATOR, ADVENTURER_EXPLORER)
 
     GAME_DATA_DIR = os.path.dirname(__file__) + "\\data\\"
 
@@ -20,7 +21,7 @@ class Game():
         self._current_island = None
         self.islands = None
         self.locations = None
-        self.explorers = None
+        self.adventurers = None
 
         self.location_deck = None
         self.location_deck_discard = None
@@ -46,11 +47,13 @@ class Game():
         self.islands.load(Game.GAME_DATA_DIR, "maps.csv")
         #self.islands.print()
 
-        self.explorers = []
+        self.adventurers = []
 
         self.location_deck = self.locations.get_locations()
         random.shuffle(self.location_deck)
         self.location_deck_discard = []
+
+
 
         logging.info("Finished Initialising game...")
 
@@ -72,23 +75,37 @@ class Game():
                 self.current_island.add_location(self.locations.get_location(random_location_name))
                 location_names.remove(random_location_name)
 
+            for i in range(1, 6):
+                self.deal_location()
+
         else:
             raise Exception("Island {0} has not been loaded!".format(island_name))
 
 
-    def add_explorer(self, explorer_type : str):
+    def add_adventurer(self, adventurer_type : str):
 
-        if explorer_type in Game.EXPLORER_TYPES:
-            if explorer_type not in self.explorers:
-                self.explorers.append(explorer_type)
-                self.current_island.add_explorer(explorer_type)
+        if adventurer_type in Game.ADVENTURER_TYPES:
+            if adventurer_type not in self.adventurers:
+                self.adventurers.append(adventurer_type)
+                self.current_island.add_adventurer(adventurer_type)
             else:
-                raise Exception("Explorer type {0} already added to the game!".format(explorer_type))
+                raise Exception("Explorer type {0} already added to the game!".format(adventurer_type))
         else:
-            raise Exception("Unknown explorer type {0}".format(explorer_type))
+            raise Exception("Unknown explorer type {0}".format(adventurer_type))
 
-    def move_explorer(self, explorer_type : str, direction : str):
-        self.current_island.move_explorer(explorer_type, direction)
+    def get_directions(self, adventurer_type : str = None):
+        valid_directions = []
+        for direction, vector in island.IslandMap.DIRECTION_VECTORS.items():
+            x,y = vector
+            length = math.sqrt(x*x + y*y)
+            if adventurer_type == Game.ADVENTURER_EXPLORER or length <= 1:
+                valid_directions.append(direction)
+
+        return valid_directions
+
+
+    def move_adventurer(self, explorer_type : str, direction : str):
+        self.current_island.move_adventurer(explorer_type, direction)
 
     def deal_location(self):
         new_location = self.location_deck.pop(0)

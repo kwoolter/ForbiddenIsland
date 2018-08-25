@@ -42,18 +42,20 @@ class GameCLI(cmd.Cmd):
         #     print(str(err))
 
     def do_add(self,args):
-        """Add an explorer"""
+        """Add an adventurer"""
         try:
-            new_exlorer_type = utils.pick("Explorer", model.Game.EXPLORER_TYPES)
-            self.model.add_explorer(new_exlorer_type)
+            new_adventurer_type = utils.pick("Adventurer", model.Game.ADVENTURER_TYPES)
+            self.model.add_adventurer(new_adventurer_type)
         except Exception as err:
             print(str(err))
+
     def do_move(self, args):
 
         try:
-            explorer_type = utils.pick("Explorer", self.model.explorers, auto_pick=True)
-            direction = utils.pick("Direction", model.IslandMap.DIRECTIONS)
-            self.model.move_explorer(explorer_type, direction)
+            adventurer_type = utils.pick("Explorer", self.model.adventurers, auto_pick=True)
+            valid_directions = self.model.get_directions(adventurer_type)
+            direction = utils.pick("Direction", valid_directions)
+            self.model.move_adventurer(adventurer_type, direction)
         except Exception as err:
             print(str(err))
 

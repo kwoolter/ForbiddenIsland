@@ -124,8 +124,13 @@ class IslandMap():
     SOUTH = "South"
     EAST = "East"
     WEST = "West"
-    DIRECTIONS = ( NORTH, SOUTH, EAST, WEST)
-    DIRECTION_VECTORS = {NORTH : (0,-1), SOUTH: (0,1), EAST:(-1,0), WEST:(1,0)}
+    NORTH_EAST = "North East"
+    NORTH_WEST = "North West"
+    SOUTH_EAST = "South East"
+    SOUTH_WEST = "South West"
+
+    DIRECTION_VECTORS = {NORTH : (0,-1), SOUTH: (0,1), EAST:(1,0), WEST:(-1,0),
+                         NORTH_WEST:(-1,-1), NORTH_EAST:(-1,1), SOUTH_WEST:(1,-1), SOUTH_EAST:(1,1)}
 
     def __init__(self, name: str):
         self.name = name
@@ -133,9 +138,9 @@ class IslandMap():
         self.map = None
         self.free_squares = []
         self.locations = {}
-        self.explorers = {}
-        self.explorer_start_locations = {}
-        self.explorer_locations = {}
+        self.adventurers = {}
+        self.adventurer_start_locations = {}
+        self.adventurer_locations = {}
         self.temple_locations = {}
         self.width = 0
 
@@ -179,7 +184,7 @@ class IslandMap():
             self.map[x][y] = new_location
             self.locations[new_location.name] = new_location
             if new_location.start is not None:
-                self.explorer_start_locations[new_location.start] = (x,y)
+                self.adventurer_start_locations[new_location.start] = (x, y)
         else:
             raise Exception("Can't add location {0} as not more free squares.".format(new_location.name))
 
@@ -190,24 +195,24 @@ class IslandMap():
         else:
             raise Exception("Flood: location: can';t find location {0} in the map".format(location_name))
 
-    def add_explorer(self, explorer_type : str):
-        if explorer_type in self.explorer_start_locations.keys():
-            x,y = self.explorer_start_locations[explorer_type]
-            self.explorer_locations[explorer_type] = (x,y)
-            print("Adding explorer {0} to square ({1},{2})".format(explorer_type,x,y))
+    def add_adventurer(self, adventurer_type : str):
+        if adventurer_type in self.adventurer_start_locations.keys():
+            x,y = self.adventurer_start_locations[adventurer_type]
+            self.adventurer_locations[adventurer_type] = (x, y)
+            print("Adding adventurer {0} to square ({1},{2})".format(adventurer_type, x, y))
         else:
-            raise Exception("Explorer type {0} does not have a defined starting location!")
+            raise Exception("adventurer type {0} does not have a defined starting location!")
 
-    def move_explorer(self, explorer_type : str, direction : str):
+    def move_adventurer(self, adventurer_type : str, direction : str):
 
-        if explorer_type not in self.explorer_locations.keys():
-            raise Exception("Move explorer: explorer type {0} not on this island!".format(explorer_type))
+        if adventurer_type not in self.adventurer_locations.keys():
+            raise Exception("Move adventurer: adventurer type {0} not on this island!".format(adventurer_type))
 
-        if direction not in IslandMap.DIRECTIONS or direction not in IslandMap.DIRECTION_VECTORS:
-            raise Exception("Moving explorer: {0} is not a valid direction!".format(direction))
+        if direction not in IslandMap.DIRECTION_VECTORS.keys():
+            raise Exception("Moving adventurer: {0} is not a valid direction!".format(direction))
 
         dx,dy = IslandMap.DIRECTION_VECTORS[direction]
-        x,y = self.explorer_locations[explorer_type]
+        x,y = self.adventurer_locations[adventurer_type]
         new_x = x + dx
         new_y = y + dy
         new_location = self.map[new_x][new_y]
@@ -216,8 +221,8 @@ class IslandMap():
         elif new_location.state == IslandLocation.SUNK:
             raise Exception("Can't move that way: Location has sunk!")
 
-        self.explorer_locations[explorer_type] = (new_x, new_y)
-        print("Move {0} {0} to ({2},{3})".format(explorer_type, direction, new_x, new_y))
+        self.adventurer_locations[adventurer_type] = (new_x, new_y)
+        print("Move {0} {1} to ({2},{3})".format(adventurer_type, direction, new_x, new_y))
 
 
 
@@ -233,7 +238,7 @@ class IslandMap():
             for x in range(0, self.width):
                 location = self.map[x][y]
                 if location is not None:
-                    if (x,y) in self.explorer_locations.values():
+                    if (x,y) in self.adventurer_locations.values():
                         row += "@"
                     elif location.state == IslandLocation.NORMAL:
                         row += "#"
