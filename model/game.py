@@ -69,7 +69,7 @@ class Game():
 
         self.treasure_deck = []
 
-        for i in range(0,5):
+        for i in range(0,6):
             self.treasure_deck.append(Game.TREASURE_EARTH)
             self.treasure_deck.append(Game.TREASURE_WIND)
             self.treasure_deck.append(Game.TREASURE_FIRE)
@@ -138,6 +138,10 @@ class Game():
         self.current_island.move_adventurer(explorer_type, direction)
 
     def deal_location(self):
+
+        if len(self.location_deck) == 0:
+            self.merge_location_decks()
+
         new_location = self.location_deck.pop(0)
 
         map_location = self.current_island.flood_location(new_location.name)
@@ -147,21 +151,36 @@ class Game():
         return new_location
 
     def merge_location_decks(self):
+        random.shuffle(self.location_deck_discard)
         self.location_deck = self.location_deck_discard + self.location_deck
         self.location_deck_discard = []
 
     def deal_treasure(self):
+
+        if len(self.treasure_deck) == 0:
+            self.merge_treasure_decks()
+
         new_treasure_card = self.treasure_deck.pop(0)
-        self.location_deck_discard.append(new_treasure_card)
+        self.treasure_deck_discard.append(new_treasure_card)
+
+        if new_treasure_card == Game.CARD_WATER_RISE:
+            self.level += 1
+            self.merge_location_decks()
+
         return new_treasure_card
 
     def merge_treasure_decks(self):
+        random.shuffle(self.treasure_deck_discard)
         self.treasure_deck = self.treasure_deck_discard + self.treasure_deck
         self.treasure_deck_discard = []
 
     def print(self):
 
+
         self.current_island.print()
+
+        print("Level:{0}".format(self.level))
+
         print("Location deck:")
         for location in self.location_deck:
             print(location)
@@ -169,6 +188,14 @@ class Game():
         print("Location discard deck:")
         for location in self.location_deck_discard:
             print(location)
+
+        print("Treasure deck:")
+        for card in self.treasure_deck:
+            print(card)
+
+        print("Treasure discard deck:")
+        for card in self.treasure_deck_discard:
+            print(card)
 
     def print_map(self):
         self.current_island.print_map()
