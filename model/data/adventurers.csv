@@ -1,7 +1,7 @@
-Type,Colour
-Diver,Black
-Engineer,Red
-Explorer,Green
-Messenger,Grey
-Navigator,Yellow
-Pilot,Blue
+Type,Colour,ShoreUp
+Diver,Black,1
+Engineer,Red,2
+Explorer,Green,1
+Messenger,Grey,1
+Navigator,Yellow,1
+Pilot,Blue,1

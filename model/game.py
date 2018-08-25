@@ -15,6 +15,15 @@ class Game():
     ADVENTURER_EXPLORER = "Explorer"
     ADVENTURER_TYPES = (ADVENTURER_DIVER, ADVENTURER_ENGINEER, ADVENTURER_PILOT, ADVENTURER_MESSENGER, ADVENTURER_NAVIGATOR, ADVENTURER_EXPLORER)
 
+    TREASURE_WIND = "Wind"
+    TREASURE_FIRE = "Fire"
+    TREASURE_EARTH = "Earth"
+    TREASURE_WATER = "Water"
+
+    CARD_SANDBAG = "Sandbag"
+    CARD_WATER_RISE = "Water Rise"
+    CARD_HELICOPTER_LIFT = "Helicopter Lift"
+
     GAME_DATA_DIR = os.path.dirname(__file__) + "\\data\\"
 
     def __init__(self):
@@ -25,6 +34,12 @@ class Game():
 
         self.location_deck = None
         self.location_deck_discard = None
+
+        self.treasure_deck = None
+        self.treasure_deck_discard = None
+
+        self.level = 2
+
 
     @property
     def current_island(self):
@@ -45,7 +60,6 @@ class Game():
 
         self.islands = island.IslandMapFactory()
         self.islands.load(Game.GAME_DATA_DIR, "maps.csv")
-        #self.islands.print()
 
         self.adventurers = []
 
@@ -53,7 +67,23 @@ class Game():
         random.shuffle(self.location_deck)
         self.location_deck_discard = []
 
+        self.treasure_deck = []
 
+        for i in range(0,5):
+            self.treasure_deck.append(Game.TREASURE_EARTH)
+            self.treasure_deck.append(Game.TREASURE_WIND)
+            self.treasure_deck.append(Game.TREASURE_FIRE)
+            self.treasure_deck.append(Game.TREASURE_WATER)
+
+        for i in range(0,3):
+            self.treasure_deck.append(Game.CARD_WATER_RISE)
+            self.treasure_deck.append(Game.CARD_HELICOPTER_LIFT)
+
+        for i in range(0,2):
+            self.treasure_deck.append(Game.CARD_SANDBAG)
+
+        random.shuffle(self.treasure_deck)
+        self.treasure_deck_discard = []
 
         logging.info("Finished Initialising game...")
 
@@ -68,7 +98,7 @@ class Game():
             location_names = self.locations.location_names
 
             if len(location_names) < self.current_island.free_locations:
-                raise Exception("Error trying to add {0} locations to a map with {1} sqaures.".format(len(location_names),self.current_island.free_locations))
+                raise Exception("Error trying to add {0} locations to a map with {1} squares.".format(len(location_names),self.current_island.free_locations))
 
             while self.current_island.free_locations > 0:
                 random_location_name = random.choice(location_names)
@@ -119,6 +149,15 @@ class Game():
     def merge_location_decks(self):
         self.location_deck = self.location_deck_discard + self.location_deck
         self.location_deck_discard = []
+
+    def deal_treasure(self):
+        new_treasure_card = self.treasure_deck.pop(0)
+        self.location_deck_discard.append(new_treasure_card)
+        return new_treasure_card
+
+    def merge_treasure_decks(self):
+        self.treasure_deck = self.treasure_deck_discard + self.treasure_deck
+        self.treasure_deck_discard = []
 
     def print(self):
 

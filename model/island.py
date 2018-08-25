@@ -224,8 +224,6 @@ class IslandMap():
         self.adventurer_locations[adventurer_type] = (new_x, new_y)
         print("Move {0} {1} to ({2},{3})".format(adventurer_type, direction, new_x, new_y))
 
-
-
     def print_layout(self):
         print("{0} island ({1}x{2})".format(self.name, self.width, self.height))
         print("Layout:")

@@ -65,6 +65,11 @@ class GameCLI(cmd.Cmd):
 
         print(str(new_location))
 
+    def do_card(self, args):
+        """Draw a card the game"""
+        new_card = self.model.deal_treasure()
+
+        print(str(new_card))
 
 
     def do_merge(self, args):
