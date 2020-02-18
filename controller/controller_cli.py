@@ -50,6 +50,7 @@ class GameCLI(cmd.Cmd):
             print(str(err))
 
     def do_move(self, args):
+        """Move a selected character"""
 
         try:
             adventurer_type = utils.pick("Explorer", self.model.adventurers, auto_pick=True)
@@ -60,13 +61,13 @@ class GameCLI(cmd.Cmd):
             print(str(err))
 
     def do_draw(self, args):
-        """Draw a card the game"""
+        """Draw a location card from the game deck"""
         new_location = self.model.deal_location()
 
         print(str(new_location))
 
     def do_card(self, args):
-        """Draw a card the game"""
+        """Draw a treasure card from the game deck"""
         new_card = self.model.deal_treasure()
 
         print(str(new_card))
